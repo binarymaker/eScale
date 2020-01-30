@@ -58,6 +58,13 @@
         <itemPath>../../library/embclib/source/crc8-ccitt/crc8-ccitt.c</itemPath>
         <itemPath>../../library/embclib/source/crc8-ccitt/crc8-ccitt.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f6" displayName="oled-driver" projectFiles="true">
+        <itemPath>../../library/oled-driver/source/font.h</itemPath>
+        <itemPath>../../library/oled-driver/source/oled-display.c</itemPath>
+        <itemPath>../../library/oled-driver/source/oled-display.h</itemPath>
+        <itemPath>../../config/config-oled-driver/oled-display-cfg.c</itemPath>
+        <itemPath>../../config/config-oled-driver/oled-display-cfg.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f4" displayName="printf" projectFiles="true">
         <itemPath>../../config/config-printf/print-cfg.h</itemPath>
         <itemPath>../../library/printf/source/print.c</itemPath>
@@ -90,6 +97,8 @@
     <Elem>.</Elem>
     <Elem>../../library/circular-buffer/source</Elem>
     <Elem>../../config/config-circular-buffer</Elem>
+    <Elem>../../library/oled-driver/source</Elem>
+    <Elem>../../config/config-oled-driver</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -202,7 +211,7 @@
       </AVR-GCC>
       <AVR-Global>
         <property key="common-include-directories"
-                  value="..\..\library\embclib\source;..\..\library\embclib\source\crc8-ccitt;..\..\library\embclib\source\crc8-ccitt;..\..\library\avr-atmega-driver\source;..\..\library\circular-buffer\source;..\..\library\printf\source;..\..\library\rotary-encoder\source;..\..\config;..\..\config\config-avr-atmega-driver;..\..\config\config-circular-buffer;..\..\config\config-embclib;..\..\config\config-printf;..\..\config\config-rotary-encoder"/>
+                  value="..\..\library\embclib\source;..\..\library\embclib\source\crc8-ccitt;..\..\library\embclib\source\crc8-ccitt;..\..\library\avr-atmega-driver\source;..\..\library\circular-buffer\source;..\..\library\printf\source;..\..\library\rotary-encoder\source;..\..\config;..\..\config\config-avr-atmega-driver;..\..\config\config-circular-buffer;..\..\config\config-embclib;..\..\config\config-printf;..\..\config\config-rotary-encoder;..\..\library\oled-driver\source;..\..\config\config-oled-driver"/>
         <property key="eep" value="false"/>
         <property key="external-ram-check" value="false"/>
         <property key="hex" value="true"/>

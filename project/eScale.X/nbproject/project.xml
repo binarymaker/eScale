@@ -24,6 +24,8 @@
                 <sourceRootElem>.</sourceRootElem>
                 <sourceRootElem>../../library/circular-buffer/source</sourceRootElem>
                 <sourceRootElem>../../config/config-circular-buffer</sourceRootElem>
+                <sourceRootElem>../../library/oled-driver/source</sourceRootElem>
+                <sourceRootElem>../../config/config-oled-driver</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
