@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>com.microchip.mplab.nbide.embedded.makeproject</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/make-project/1">
+            <name>eScale</name>
+            <creation-uuid>e344e3e9-ff80-4381-94cc-d7dd90db846d</creation-uuid>
+            <make-project-type>0</make-project-type>
+            <c-extensions>c</c-extensions>
+            <cpp-extensions/>
+            <header-extensions>h</header-extensions>
+            <asminc-extensions/>
+            <sourceEncoding>ISO-8859-1</sourceEncoding>
+            <make-dep-projects/>
+            <sourceRootList>
+                <sourceRootElem>../../library/avr-atmega-driver/source</sourceRootElem>
+                <sourceRootElem>../../library/embclib/source</sourceRootElem>
+                <sourceRootElem>../../config/config-avr-atmega-driver</sourceRootElem>
+                <sourceRootElem>../../config/config-embclib</sourceRootElem>
+                <sourceRootElem>../../library/rotary-encoder/source</sourceRootElem>
+                <sourceRootElem>../../config/config-rotary-encoder</sourceRootElem>
+                <sourceRootElem>../../config/config-printf</sourceRootElem>
+                <sourceRootElem>../../library/printf/source</sourceRootElem>
+                <sourceRootElem>.</sourceRootElem>
+            </sourceRootList>
+            <confList>
+                <confElem>
+                    <name>default</name>
+                    <type>2</type>
+                </confElem>
+            </confList>
+            <formatting>
+                <project-formatting-style>false</project-formatting-style>
+            </formatting>
+        </data>
+    </configuration>
+</project>
