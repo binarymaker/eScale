@@ -22,6 +22,8 @@
                 <sourceRootElem>../../config/config-printf</sourceRootElem>
                 <sourceRootElem>../../library/printf/source</sourceRootElem>
                 <sourceRootElem>.</sourceRootElem>
+                <sourceRootElem>../../library/circular-buffer/source</sourceRootElem>
+                <sourceRootElem>../../config/config-circular-buffer</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

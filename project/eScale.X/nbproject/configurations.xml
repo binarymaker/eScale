@@ -38,6 +38,11 @@
         <itemPath>../../library/avr-atmega-driver/source/usart.c</itemPath>
         <itemPath>../../library/avr-atmega-driver/source/usart.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f5" displayName="circular-buffer" projectFiles="true">
+        <itemPath>../../library/circular-buffer/source/circular-buffer.c</itemPath>
+        <itemPath>../../library/circular-buffer/source/circular-buffer.h</itemPath>
+        <itemPath>../../config/config-circular-buffer/circular-buffer-cfg.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f2" displayName="embclib" projectFiles="true">
         <logicalFolder name="f1" displayName="_cfg" projectFiles="true">
           <itemPath>../../config/config-embclib/complier-cfg.h</itemPath>
@@ -83,6 +88,8 @@
     <Elem>../../config/config-printf</Elem>
     <Elem>../../library/printf/source</Elem>
     <Elem>.</Elem>
+    <Elem>../../library/circular-buffer/source</Elem>
+    <Elem>../../config/config-circular-buffer</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
