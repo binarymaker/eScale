@@ -52,12 +52,40 @@ main()
   
   OLED_DISPLAY_FillScreen(0x00);
   
+  uint8_t laser_sensor_reply[7];
+  uint32_t distance;
   while(1)
   {
-    OLED_DISPLAY_SetPointer(0, 1);
-    OLED_DISPLAY_Printf("Laster dist(meter)");
-    OLED_DISPLAY_SetPointer(0, 2);
-    OLED_DISPLAY_Printf("Serial buffer %03d", CIRCULAR_BUFFER_Available(&serial_buffer_obj));
-    DELAY_ms(1000);
+    /* Clear serial datas */
+    CIRCULAR_BUFFER_Flush(&serial_buffer_obj);
+    /* Measure commend to sensor */
+    USART_Printf("AT1#");
+    while(CIRCULAR_BUFFER_Available(&serial_buffer_obj) < 7)
+    {
+      /* wail for sensor reply */
+    }
+    uint8_t idx_u8 = 0;
+    uint8_t data;
+    while(CIRCULAR_BUFFER_Available(&serial_buffer_obj))
+    {
+      CIRCULAR_BUFFER_Read(&serial_buffer_obj, &data);
+      laser_sensor_reply[idx_u8] = data;
+      idx_u8++;
+    }
+    
+    if (laser_sensor_reply[0] == (uint8_t)'A')
+    {
+      /* 0 1 2 3 4 5 6
+       * A T D $ $ $ C
+       * $ is data sequence
+       */
+      distance = (uint32_t)laser_sensor_reply[5]       | 
+                 (uint32_t)laser_sensor_reply[4] << 8  |
+                 (uint32_t)laser_sensor_reply[3] << 16 ;
+      
+      OLED_DISPLAY_SetPointer(0, 2);
+      OLED_DISPLAY_Printf("dist(meter) = %6d", distance);
+    }
+    DELAY_ms(3000);
   }
 }
