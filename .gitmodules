@@ -22,3 +22,7 @@
 	path = library/circular-buffer
 	url = https://github.com/binarymaker/circular-buffer.git
 	branch = library
+[submodule "library/oled-driver"]
+	path = library/oled-driver
+	url = https://github.com/binarymaker/oled-driver.git
+	branch = library
