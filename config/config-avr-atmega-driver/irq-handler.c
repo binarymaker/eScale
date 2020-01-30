@@ -20,10 +20,12 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "mcu.h"
+#include "circular-buffer.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+extern circularBuffer_st serial_buffer_obj;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -31,4 +33,11 @@ ISR(TIMER0_OVF_vect)
 {  
   SYSTIMER_Engin();
   BIT_Clear(TIFR0, TOV0);
+}
+
+ISR(USART_RX_vect)
+{  
+  uint8_t data_u8;
+  data_u8 = USART_Read();
+  CIRCULAR_BUFFER_Write(&serial_buffer_obj, &data_u8);
 }
