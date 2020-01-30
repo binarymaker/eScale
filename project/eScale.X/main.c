@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "mcu.h"
+#include "oled-display.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -31,9 +32,23 @@ int
 main()
 {
   MCU_Init();
+  OLED_DISPLAY_Init();
+  OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
+  
+  OLED_DISPLAY_FillScreen(0x00);
+  
+  OLED_DISPLAY_SetPointer(46, 1);
+  OLED_DISPLAY_Printf("eScale");
+  OLED_DISPLAY_SetPointer(10, 2);
+  OLED_DISPLAY_Printf("Measure everything");
+  SYSTIMER_Delay(1000);
+  
+  OLED_DISPLAY_FillScreen(0x00);
   
   while(1)
   {
+    OLED_DISPLAY_SetPointer(0, 1);
+    OLED_DISPLAY_Printf("Laster dist(meter)");
     
   }
   
