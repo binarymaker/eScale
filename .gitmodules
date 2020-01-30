@@ -18,3 +18,7 @@
 	path = library/rotary-encoder
 	url = https://github.com/binarymaker/rotary-encoder.git
 	branch = library
+[submodule "library/circular-buffer"]
+	path = library/circular-buffer
+	url = https://github.com/binarymaker/circular-buffer.git
+	branch = library
