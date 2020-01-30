@@ -28,7 +28,7 @@
 #define F_CPU                                                       (16000000UL)
 
 #define MCU_GPIO_DRIVER                                                  ENABLE 
-#define MCU_EXTERNAL_INTERRUPT_DRIVER                                    DISABLE
+#define MCU_EXTERNAL_INTERRUPT_DRIVER                                    ENABLE
 #define MCU_ADC_DRIVER                                                   DISABLE
 #define MCU_USART_DRIVER                                                 ENABLE
 #define MCU_I2C_DRIVER                                                   DISABLE

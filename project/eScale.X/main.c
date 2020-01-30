@@ -30,5 +30,11 @@
 int
 main()
 {
+  MCU_Init();
+  
+  while(1)
+  {
+    
+  }
   
 }
