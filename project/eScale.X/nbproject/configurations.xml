@@ -197,7 +197,8 @@
         <property key="no-system-directories" value="false"/>
         <property key="optimization-level" value="-O1"/>
         <property key="pack-struct" value="true"/>
-        <property key="preprocessor-macros" value="USART_PRINTF_REDIRECT"/>
+        <property key="preprocessor-macros"
+                  value="USART_PRINTF_REDIRECT;OLED_DISPLAY_PRINTF_REDIRECT"/>
         <property key="preprocessor-macros-undefined" value=""/>
         <property key="save-temps" value="false"/>
         <property key="short-calls" value="false"/>
