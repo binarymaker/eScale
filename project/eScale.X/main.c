@@ -45,8 +45,42 @@ main()
 
   OLED_DISPLAY_SetPointer(0, 0);
   OLED_DISPLAY_Icon(eScaleLogo_128x64, 128, 64);
-  SYSTIMER_Delay(1000);
+  SYSTIMER_Delay(5000);
+  begin:
+  OLED_DISPLAY_SetPointer(0, 0) ;OLED_DISPLAY_FillScreen(0x00);
+  OLED_DISPLAY_SetPointer(31, 0);OLED_DISPLAY_Icon(encoderRuler_64x48, 64, 48);
+  OLED_DISPLAY_SetPointer(30, 6);OLED_DISPLAY_Printf("Encoder Tape");
   
+  SYSTIMER_Delay(5000);
+  OLED_DISPLAY_SetPointer(0, 0) ;OLED_DISPLAY_FillScreen(0x00);
+  OLED_DISPLAY_SetPointer(31, 0);OLED_DISPLAY_Icon(TapeIcon_64x48, 64, 48);
+  OLED_DISPLAY_SetPointer(30, 6);OLED_DISPLAY_Printf("Laser Meter");
+  
+  SYSTIMER_Delay(5000);
+  OLED_DISPLAY_SetPointer(0, 0) ;OLED_DISPLAY_FillScreen(0x00);
+  OLED_DISPLAY_SetPointer(31, 0);OLED_DISPLAY_Icon(protratorIcon_64x48, 64, 48);
+  OLED_DISPLAY_SetPointer(30, 6);OLED_DISPLAY_Printf("Angle Meter");
+  
+  SYSTIMER_Delay(5000);
+  OLED_DISPLAY_SetPointer(0, 0) ;OLED_DISPLAY_FillScreen(0x00);
+  OLED_DISPLAY_SetPointer(31, 0);OLED_DISPLAY_Icon(areaIcon_64x48, 64, 48);
+  OLED_DISPLAY_SetPointer(34, 6);OLED_DISPLAY_Printf("Area Meter");
+  
+  SYSTIMER_Delay(5000);
+  OLED_DISPLAY_SetPointer(0, 0) ;OLED_DISPLAY_FillScreen(0x00);
+  OLED_DISPLAY_SetPointer(31, 0);OLED_DISPLAY_Icon(volumeIcon_64x48, 64, 48);
+  OLED_DISPLAY_SetPointer(30, 6);OLED_DISPLAY_Printf("Volume Meter");
+  
+  SYSTIMER_Delay(5000);
+  OLED_DISPLAY_SetPointer(0, 0) ;OLED_DISPLAY_FillScreen(0x00);
+  OLED_DISPLAY_SetPointer(31, 0);OLED_DISPLAY_Icon(pythagoreamIcon_64x48, 64, 48);
+  OLED_DISPLAY_SetPointer(24, 6);OLED_DISPLAY_Printf("Pythagrom Meter");
+  
+  SYSTIMER_Delay(5000);
+  
+  goto begin;
+  
+  while(1);
   OLED_DISPLAY_SetPointer(0, 0);
   OLED_DISPLAY_FillScreen(0x00);
   

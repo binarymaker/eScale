@@ -36,6 +36,12 @@
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 extern const unsigned char eScaleLogo_128x64[];
+extern const unsigned char pythagoreamIcon_64x48[];
+extern const unsigned char volumeIcon_64x48[];
+extern const unsigned char areaIcon_64x48[];
+extern const unsigned char protratorIcon_64x48[];
+extern const unsigned char TapeIcon_64x48[];
+extern const unsigned char encoderRuler_64x48[];
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
