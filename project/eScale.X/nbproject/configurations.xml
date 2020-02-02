@@ -78,6 +78,8 @@
         <itemPath>../../library/rotary-encoder/source/rotary-encoder.h</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
+      <itemPath>../../source/icon-set.c</itemPath>
+      <itemPath>../../source/icon-set.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -99,6 +101,7 @@
     <Elem>../../config/config-circular-buffer</Elem>
     <Elem>../../library/oled-driver/source</Elem>
     <Elem>../../config/config-oled-driver</Elem>
+    <Elem>../../source</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -114,7 +117,7 @@
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="ATmega_DFP" vendor="Microchip" version="2.0.12"/>
+        <pack name="ATmega_DFP" vendor="Atmel" version="1.2.285"/>
       </packs>
       <compileType>
         <linkerTool>
@@ -212,7 +215,7 @@
       </AVR-GCC>
       <AVR-Global>
         <property key="common-include-directories"
-                  value="..\..\library\embclib\source;..\..\library\embclib\source\crc8-ccitt;..\..\library\embclib\source\crc8-ccitt;..\..\library\avr-atmega-driver\source;..\..\library\circular-buffer\source;..\..\library\printf\source;..\..\library\rotary-encoder\source;..\..\config;..\..\config\config-avr-atmega-driver;..\..\config\config-circular-buffer;..\..\config\config-embclib;..\..\config\config-printf;..\..\config\config-rotary-encoder;..\..\library\oled-driver\source;..\..\config\config-oled-driver"/>
+                  value="..\..\library\embclib\source;..\..\library\embclib\source\crc8-ccitt;..\..\library\embclib\source\crc8-ccitt;..\..\library\avr-atmega-driver\source;..\..\library\circular-buffer\source;..\..\library\printf\source;..\..\library\rotary-encoder\source;..\..\config;..\..\config\config-avr-atmega-driver;..\..\config\config-circular-buffer;..\..\config\config-embclib;..\..\config\config-printf;..\..\config\config-rotary-encoder;..\..\library\oled-driver\source;..\..\config\config-oled-driver;..\..\source"/>
         <property key="eep" value="false"/>
         <property key="external-ram-check" value="false"/>
         <property key="hex" value="true"/>

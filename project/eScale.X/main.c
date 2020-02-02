@@ -22,6 +22,7 @@
 #include "mcu.h"
 #include "oled-display.h"
 #include "circular-buffer.h"
+#include "icon-set.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -41,15 +42,12 @@ main()
   CIRCULAR_BUFFER_Init(&serial_buffer_obj, serial_buffer, sizeof(uint8_t), 32);
   OLED_DISPLAY_Init();
   OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
-  
-  OLED_DISPLAY_FillScreen(0x00);
-  
-  OLED_DISPLAY_SetPointer(46, 1);
-  OLED_DISPLAY_Printf("eScale");
-  OLED_DISPLAY_SetPointer(10, 2);
-  OLED_DISPLAY_Printf("Measure everything");
+
+  OLED_DISPLAY_SetPointer(0, 0);
+  OLED_DISPLAY_Icon(eScaleLogo_128x64, 128, 64);
   SYSTIMER_Delay(1000);
   
+  OLED_DISPLAY_SetPointer(0, 0);
   OLED_DISPLAY_FillScreen(0x00);
   
   uint8_t laser_sensor_reply[7];
