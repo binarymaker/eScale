@@ -26,3 +26,7 @@
 	path = library/oled-driver
 	url = https://github.com/binarymaker/oled-driver.git
 	branch = library
+[submodule "library/state-machine"]
+	path = library/state-machine
+	url = https://github.com/binarymaker/state-machine-lite.git
+	branch = library
