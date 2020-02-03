@@ -77,7 +77,7 @@ APP_MenuDisplay(uint8_t menu_id_u8)
 STATE_MACHINE_State(APP_MENU)
 {
   escale_st * escale_ptr = (escale_st *) STATE_MACHINE_ptr;
-  static uint8_t last_menu_select = 0;
+  static uint8_t last_menu_select = 100;
   
   if (STATE_ENTRY)
   {
