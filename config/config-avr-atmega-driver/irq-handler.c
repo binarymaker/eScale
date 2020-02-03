@@ -21,11 +21,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "mcu.h"
 #include "circular-buffer.h"
+#include "app-state.h"
+#include "rotary-encoder.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 extern circularBuffer_st serial_buffer_obj;
+extern escale_st escale;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -40,4 +43,10 @@ ISR(USART_RX_vect)
   uint8_t data_u8;
   data_u8 = USART_Read();
   CIRCULAR_BUFFER_Write(&serial_buffer_obj, &data_u8);
+}
+
+ISR(PCINT1_vect)
+{
+  ROTARY_ENCODER_Update(&escale.encoder_tape);
+  ROTARY_ENCODER_Update(&escale.encoder_nav);
 }

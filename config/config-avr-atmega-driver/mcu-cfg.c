@@ -40,14 +40,14 @@ Pin map
                                     +----\/----+
                 (PCINT14/RESET) PC6 |1       28| PC5 (ADC5/SCL/PCINT13)
                   (PCINT16/RXD) PD0 |2       27| PC4 (ADC4/SDA/PCINT12)
-                  (PCINT17/TXD) PD1 |3   A   26| PC3 (ADC3/PCINT11)
-                 (PCINT18/INT0) PD2 |4   T   25| PC2 (ADC2/PCINT10)
-            (PCINT19/OC2B/INT1) PD3 |5   M   24| PC1 (ADC1/PCINT9)
-               (PCINT20/XCK/T0) PD4 |6   E   23| PC0 (ADC0/PCINT8)
+                  (PCINT17/TXD) PD1 |3   A   26| PC3 (ADC3/PCINT11) | navigation encoder B
+                 (PCINT18/INT0) PD2 |4   T   25| PC2 (ADC2/PCINT10) | navigation encoder A
+            (PCINT19/OC2B/INT1) PD3 |5   M   24| PC1 (ADC1/PCINT9)  | tape encoder B
+               (PCINT20/XCK/T0) PD4 |6   E   23| PC0 (ADC0/PCINT8)  | tape encoder A
                                 VCC |7   G   22| GND
                                 GND |8   A   21| AREF
            (PCINT6/XTAL1/TOSC1) PB6 |9       20| AVCC
-           (PCINT7/XTAL2/TOSC2) PB7 |10  3   19| PB5 (SCK/PCINT5)
+           (PCINT7/XTAL2/TOSC2) PB7 |10  3   19| PB5 (SCK/PCINT5)   | navigation Button
               (PCINT21/OC0B/T1) PD5 |11  2   18| PB4 (MISO/PCINT4)
             (PCINT22/OC0A/AIN0) PD6 |12  8   17| PB3 (MOSI/OC2A/PCINT3)
                  (PCINT23/AIN1) PD7 |13      16| PB2 (SS/OC1B/PCINT2)
@@ -67,8 +67,8 @@ GPIO_Config()
    * _O_ - Output
    * _I_ - Input      
    */
-  DDRB    =    _O_(7)| _O_(6)| _O_(5)| _O_(4)| _O_(3)| _O_(2)| _O_(1)| _O_(0)  ; 
-  DDRC    =    _O_(7)| _O_(6)| _O_(5)| _O_(4)| _O_(3)| _O_(2)| _O_(1)| _O_(0)  ; 
+  DDRB    =    _O_(7)| _O_(6)| _I_(5)| _O_(4)| _O_(3)| _O_(2)| _O_(1)| _O_(0)  ; 
+  DDRC    =    _O_(7)| _O_(6)| _O_(5)| _O_(4)| _I_(3)| _I_(2)| _I_(1)| _I_(0)  ; 
   DDRD    =    _O_(7)| _O_(6)| _O_(5)| _O_(4)| _O_(3)| _O_(2)| _O_(1)| _I_(0)  ;
   
   /**
@@ -113,7 +113,7 @@ EXTERNAL_INTERRUPT_config(void)
    * 
    *              PCIE2      |     PCIE1      |     PCIE0                       
    */
-  PCICR   =       _L_(2)     |     _L_(1)     |     _L_(0)                     ;
+  PCICR   =       _L_(2)     |     _H_(1)     |     _L_(0)                     ;
   
   /**
    * Pin change interrupt channels ---------------------------------------------
@@ -125,7 +125,7 @@ EXTERNAL_INTERRUPT_config(void)
    * PCINT2->|   23  |   22  |   21  |   20  |   19  |   18  |   17  |   16  |
    */
   PCMSK0  =    _L_(7)| _L_(6)| _L_(5)| _L_(4)| _L_(3)| _L_(2)| _L_(1)| _L_(0)  ;
-  PCMSK1  =            _L_(6)| _L_(5)| _L_(4)| _L_(3)| _L_(2)| _L_(1)| _L_(0)  ;
+  PCMSK1  =            _L_(6)| _L_(5)| _L_(4)| _H_(3)| _H_(2)| _H_(1)| _H_(0)  ;
   PCMSK2  =    _L_(7)| _L_(6)| _L_(5)| _L_(4)| _L_(3)| _L_(2)| _L_(1)| _L_(0)  ;
 }
 

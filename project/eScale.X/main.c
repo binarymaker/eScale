@@ -24,6 +24,7 @@
 #include "circular-buffer.h"
 #include "app-state.h"
 #include "icon-set.h"
+#include "rotary-encoder.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -38,7 +39,9 @@ main()
 {
   MCU_Init();
   STATE_MACHINE_Init(escale.state_machine, APP_MENU);
-
+  ROTARY_ENCODER_Init(&escale.encoder_tape, P_C0, P_C1);
+  ROTARY_ENCODER_Init(&escale.encoder_nav, P_C2, P_C3);
+  
   MCU_INTERRUPT_ENABLE();
   
   CIRCULAR_BUFFER_Init(&serial_buffer_obj, serial_buffer, sizeof(uint8_t), 32);
@@ -55,7 +58,11 @@ main()
 
   while(1)
   {
-    STATE_MACHINE_Exec(escale.state_machine);
-    DELAY_ms(2000);
+    //STATE_MACHINE_Exec(escale.state_machine);
+    OLED_DISPLAY_SetPointer(0, 0);
+    OLED_DISPLAY_Printf("Nav Encoder  %04D", escale.encoder_nav.count);
+    OLED_DISPLAY_SetPointer(0, 1);
+    OLED_DISPLAY_Printf("Tape Encoder %04D", escale.encoder_tape.count);
+    DELAY_ms(5);
   }
 }
