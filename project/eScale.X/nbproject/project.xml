@@ -15,18 +15,14 @@
             <sourceRootList>
                 <sourceRootElem>../../library/avr-atmega-driver/source</sourceRootElem>
                 <sourceRootElem>../../library/embclib/source</sourceRootElem>
-                <sourceRootElem>../../config/config-avr-atmega-driver</sourceRootElem>
-                <sourceRootElem>../../config/config-embclib</sourceRootElem>
                 <sourceRootElem>../../library/rotary-encoder/source</sourceRootElem>
-                <sourceRootElem>../../config/config-rotary-encoder</sourceRootElem>
-                <sourceRootElem>../../config/config-printf</sourceRootElem>
                 <sourceRootElem>../../library/printf/source</sourceRootElem>
                 <sourceRootElem>.</sourceRootElem>
                 <sourceRootElem>../../library/circular-buffer/source</sourceRootElem>
-                <sourceRootElem>../../config/config-circular-buffer</sourceRootElem>
                 <sourceRootElem>../../library/oled-driver/source</sourceRootElem>
-                <sourceRootElem>../../config/config-oled-driver</sourceRootElem>
                 <sourceRootElem>../../source</sourceRootElem>
+                <sourceRootElem>../../library/state-machine/source</sourceRootElem>
+                <sourceRootElem>../../config</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

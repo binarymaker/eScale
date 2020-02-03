@@ -33,11 +33,18 @@
 #define __APP_STATE_VERSION      (0x0001u)
 
 /* Includes ------------------------------------------------------------------*/
+#include "state-machine.h"
 /* Exported types ------------------------------------------------------------*/
+typedef struct escale
+{
+  stateMachine_st state_machine;
+}escale_st;
+
+escale_st escale;
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-
+STATE_MACHINE_State(APP_MENU);
 
 #ifdef __cplusplus
 }
