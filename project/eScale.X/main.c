@@ -51,18 +51,12 @@ main()
 
   OLED_DISPLAY_SetPointer(0, 0);
   OLED_DISPLAY_Icon(eScaleLogo_128x64, 128, 64);
-  SYSTIMER_Delay(5000);
-
-  OLED_DISPLAY_SetPointer(0, 0);
-  OLED_DISPLAY_FillScreen(0x00);
+  SYSTIMER_Delay(1000);
 
   while(1)
   {
-    //STATE_MACHINE_Exec(escale.state_machine);
-    OLED_DISPLAY_SetPointer(0, 0);
-    OLED_DISPLAY_Printf("Nav Encoder  %04D", escale.encoder_nav.count);
-    OLED_DISPLAY_SetPointer(0, 1);
-    OLED_DISPLAY_Printf("Tape Encoder %04D", escale.encoder_tape.count);
+    STATE_MACHINE_Exec(escale.state_machine);
+    
     DELAY_ms(5);
   }
 }

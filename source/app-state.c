@@ -24,11 +24,12 @@
 #include "oled-display.h"
 #include "state-machine.h"
 #include "icon-set.h"
+#include "util/atomic.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-static uint8_t encoder_count;
+static uint8_t menu_select;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -70,24 +71,36 @@ APP_MenuDisplay(uint8_t menu_id_u8)
       //todo warning
       break;
   }
+  OLED_DISPLAY_SetPointer(109, 0);OLED_DISPLAY_Printf("%d/5", menu_id_u8);
 }
 
 STATE_MACHINE_State(APP_MENU)
 {
-  static uint8_t last_encoder_count = 0;
+  escale_st * escale_ptr = (escale_st *) STATE_MACHINE_ptr;
+  static uint8_t last_menu_select = 0;
   
   if (STATE_ENTRY)
   {
 
   }
   
-  encoder_count++;
-  encoder_count = encoder_count % 5;
-  
-  if(last_encoder_count != encoder_count)
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
   {
-    APP_MenuDisplay(encoder_count);
-    last_encoder_count = encoder_count;
+    if (5 < escale_ptr->encoder_nav.count)
+    {
+      escale_ptr->encoder_nav.count = 0;
+    }
+    if (0 > escale_ptr->encoder_nav.count)
+    {
+      escale_ptr->encoder_nav.count = 5;
+    }
+    menu_select = escale_ptr->encoder_nav.count;
+  }
+  
+  if(last_menu_select != menu_select)
+  {
+    APP_MenuDisplay(menu_select);
+    last_menu_select = menu_select;
   }
 
   if (STATE_EXIT)
