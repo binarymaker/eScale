@@ -35,6 +35,26 @@ INT_SENSE_RISING
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
+/*
+Pin map
+                                    +----\/----+
+                (PCINT14/RESET) PC6 |1       28| PC5 (ADC5/SCL/PCINT13)
+                  (PCINT16/RXD) PD0 |2       27| PC4 (ADC4/SDA/PCINT12)
+                  (PCINT17/TXD) PD1 |3   A   26| PC3 (ADC3/PCINT11)
+                 (PCINT18/INT0) PD2 |4   T   25| PC2 (ADC2/PCINT10)
+            (PCINT19/OC2B/INT1) PD3 |5   M   24| PC1 (ADC1/PCINT9)
+               (PCINT20/XCK/T0) PD4 |6   E   23| PC0 (ADC0/PCINT8)
+                                VCC |7   G   22| GND
+                                GND |8   A   21| AREF
+           (PCINT6/XTAL1/TOSC1) PB6 |9       20| AVCC
+           (PCINT7/XTAL2/TOSC2) PB7 |10  3   19| PB5 (SCK/PCINT5)
+              (PCINT21/OC0B/T1) PD5 |11  2   18| PB4 (MISO/PCINT4)
+            (PCINT22/OC0A/AIN0) PD6 |12  8   17| PB3 (MOSI/OC2A/PCINT3)
+                 (PCINT23/AIN1) PD7 |13      16| PB2 (SS/OC1B/PCINT2)
+             (PCINT0/CLKO/ICP1) PB0 |14      15| PB1 (OC1A/PCINT1)
+                                    +----------+
+*/
+
 /* ########################################################################## */
 /*                        GPIO INITIALIZATION SETTINGS                        */
 /* ########################################################################## */
