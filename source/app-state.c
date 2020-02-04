@@ -81,7 +81,8 @@ STATE_MACHINE_State(APP_MENU)
   
   if (STATE_ENTRY)
   {
-
+    /* menu font select */
+    OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
   }
   
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
@@ -102,9 +103,66 @@ STATE_MACHINE_State(APP_MENU)
     APP_MenuDisplay(menu_select);
     last_menu_select = menu_select;
   }
-
+  
+  if (GPIO_PinRead(P_B5) == LOW) //TODO BSP package
+  {
+    while(GPIO_PinRead(P_B5) == LOW);
+    switch(menu_select)
+    {
+      case 0:
+        STATE_MACHINE_StateChange(APP_ENCODER_TAPE)
+        break;
+        
+      default:
+        break;
+    }
+  }
+  
   if (STATE_EXIT)
   {
 
+  }
+}
+
+STATE_MACHINE_State(APP_ENCODER_TAPE)
+{
+  escale_st * escale_ptr = (escale_st *) STATE_MACHINE_ptr;
+  static int32_t rotation_pulse_count;
+  if (STATE_ENTRY)
+  {
+    OLED_DISPLAY_SetPointer(0,0);
+    OLED_DISPLAY_FillScreen(0x00);
+    
+    /* menu font select */
+    OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
+    OLED_DISPLAY_SetPointer(30, 1);
+    OLED_DISPLAY_Printf("Encoder Tape");
+    OLED_DISPLAY_SetPointer(115, 5);
+    OLED_DISPLAY_Printf("M");
+    
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+      escale_ptr->encoder_tape.count = 0;
+    }
+  }
+  
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+  {
+    rotation_pulse_count = escale_ptr->encoder_tape.count;
+    if(0 > rotation_pulse_count)
+    {
+      escale_ptr->encoder_tape.count = 0;
+      rotation_pulse_count = 0;
+    }
+  }
+  
+  /* menu font select */
+  OLED_DISPLAY_FontSelect(SquareFont16x24, 16, 24, 43, 58);
+  OLED_DISPLAY_SetPointer(15, 4);
+  OLED_DISPLAY_Printf("%06d", rotation_pulse_count);
+    
+  if(STATE_EXIT)
+  {
+    
   }
 }

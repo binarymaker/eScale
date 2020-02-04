@@ -48,6 +48,7 @@ escale_st escale;
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 STATE_MACHINE_State(APP_MENU);
+STATE_MACHINE_State(APP_ENCODER_TAPE);
 
 #ifdef __cplusplus
 }
