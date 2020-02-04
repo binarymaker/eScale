@@ -30,3 +30,7 @@
 ### Ceedling ###
 /test/**/build/**
 test/simulation/Last Loaded eScale.pdsbak
+
+### proteus ###
+/test/simulation/**
+!test/simulation/eScale.pdsprj
