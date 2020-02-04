@@ -43,6 +43,7 @@ extern const unsigned char protratorIcon_64x48[];
 extern const unsigned char TapeIcon_64x48[];
 extern const unsigned char encoderRuler_64x48[];
 
+extern const unsigned char SquareFont16x24[];
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
