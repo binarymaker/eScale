@@ -74,6 +74,37 @@ APP_MenuDisplay(uint8_t menu_id_u8)
   OLED_DISPLAY_SetPointer(109, 0);OLED_DISPLAY_Printf("%d/5", menu_id_u8);
 }
 
+typedef enum
+{
+  APP_DISPLAY_UNIT_M,
+  APP_DISPLAY_UNIT_CM,
+  APP_DISPLAY_UNIT_FT,
+  APP_DISPLAY_UNIT_IN,
+}APP_DISPLAY_UNIT_et;
+
+void
+APP_ReadingDisplay(int32_t value_mm_i32, APP_DISPLAY_UNIT_et unit_ev)
+{
+  OLED_DISPLAY_FontSelect(SquareFont16x24, 16, 24, 43, 58);
+  OLED_DISPLAY_SetPointer(15, 4);
+  switch(unit_ev)
+  {
+    case APP_DISPLAY_UNIT_M:
+      OLED_DISPLAY_Printf("%02.3f", (float)value_mm_i32/1000);
+      break;
+    case APP_DISPLAY_UNIT_CM:
+      OLED_DISPLAY_Printf("%04.1f", (float)value_mm_i32/10);
+      break;
+    case APP_DISPLAY_UNIT_FT:
+      OLED_DISPLAY_Printf("%03.2f", (float)value_mm_i32 * 0.00328082);
+      break;
+    case APP_DISPLAY_UNIT_IN:
+      OLED_DISPLAY_Printf("%04.1f", (float)value_mm_i32 * 0.0393701);
+      break;
+    default:
+      break;
+  }
+}
 STATE_MACHINE_State(APP_MENU)
 {
   escale_st * escale_ptr = (escale_st *) STATE_MACHINE_ptr;
@@ -159,7 +190,7 @@ STATE_MACHINE_State(APP_ENCODER_TAPE)
   /* menu font select */
   OLED_DISPLAY_FontSelect(SquareFont16x24, 16, 24, 43, 58);
   OLED_DISPLAY_SetPointer(15, 4);
-  OLED_DISPLAY_Printf("%06d", rotation_pulse_count);
+  APP_ReadingDisplay(rotation_pulse_count, APP_DISPLAY_UNIT_M);
     
   if(STATE_EXIT)
   {
