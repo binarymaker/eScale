@@ -120,11 +120,11 @@ STATE_MACHINE_State(APP_MENU)
   {
     if (5 < escale_ptr->encoder_nav.count)
     {
-      escale_ptr->encoder_nav.count = 0;
+      ROTARY_ENCODER_SetCount(&escale_ptr->encoder_nav, 0);
     }
     if (0 > escale_ptr->encoder_nav.count)
     {
-      escale_ptr->encoder_nav.count = 5;
+      ROTARY_ENCODER_SetCount(&escale_ptr->encoder_nav, 5);
     }
     menu_select = escale_ptr->encoder_nav.count;
   }
@@ -173,7 +173,7 @@ STATE_MACHINE_State(APP_ENCODER_TAPE)
     
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
     {
-      escale_ptr->encoder_tape.count = 0;
+      ROTARY_ENCODER_SetCount(&escale_ptr->encoder_tape, 0);
     }
   }
   
@@ -182,7 +182,7 @@ STATE_MACHINE_State(APP_ENCODER_TAPE)
     rotation_pulse_count = escale_ptr->encoder_tape.count;
     if(0 > rotation_pulse_count)
     {
-      escale_ptr->encoder_tape.count = 0;
+      ROTARY_ENCODER_SetCount(&escale_ptr->encoder_tape, 0);
       rotation_pulse_count = 0;
     }
   }
