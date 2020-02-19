@@ -43,28 +43,28 @@ APP_MenuDisplay(uint8_t menu_id_u8)
   switch(menu_id_u8)
   {
     case 0:
-      OLED_DISPLAY_SetPointer(31, 0);OLED_DISPLAY_Icon(encoderRuler_64x48, 64, 48);
-      OLED_DISPLAY_SetPointer(30, 6);OLED_DISPLAY_Printf("Encoder Tape");
+      OLED_DISPLAY_SetPointer(31, 2);OLED_DISPLAY_Icon(encoderRuler_64x48, 64, 48);
+      OLED_DISPLAY_SetPointer(30, 1);OLED_DISPLAY_Printf("Encoder Tape");
       break;
     case 1:
-      OLED_DISPLAY_SetPointer(31, 0);OLED_DISPLAY_Icon(TapeIcon_64x48, 64, 48);
-      OLED_DISPLAY_SetPointer(30, 6);OLED_DISPLAY_Printf("Laser Meter");
+      OLED_DISPLAY_SetPointer(31, 2);OLED_DISPLAY_Icon(TapeIcon_64x48, 64, 48);
+      OLED_DISPLAY_SetPointer(33, 1);OLED_DISPLAY_Printf("Laser Tape");
       break;
     case 2:
-      OLED_DISPLAY_SetPointer(31, 0);OLED_DISPLAY_Icon(protratorIcon_64x48, 64, 48);
-      OLED_DISPLAY_SetPointer(30, 6);OLED_DISPLAY_Printf("Angle Meter");
+      OLED_DISPLAY_SetPointer(31, 2);OLED_DISPLAY_Icon(protratorIcon_64x48, 64, 48);
+      OLED_DISPLAY_SetPointer(48, 1);OLED_DISPLAY_Printf("Angle");
       break;
     case 3:
-      OLED_DISPLAY_SetPointer(31, 0);OLED_DISPLAY_Icon(areaIcon_64x48, 64, 48);
-      OLED_DISPLAY_SetPointer(34, 6);OLED_DISPLAY_Printf("Area Meter");
+      OLED_DISPLAY_SetPointer(31, 2);OLED_DISPLAY_Icon(areaIcon_64x48, 64, 48);
+      OLED_DISPLAY_SetPointer(50, 1);OLED_DISPLAY_Printf("Area");
       break;
     case 4:
-      OLED_DISPLAY_SetPointer(31, 0);OLED_DISPLAY_Icon(volumeIcon_64x48, 64, 48);
-      OLED_DISPLAY_SetPointer(30, 6);OLED_DISPLAY_Printf("Volume Meter");
+      OLED_DISPLAY_SetPointer(31, 2);OLED_DISPLAY_Icon(volumeIcon_64x48, 64, 48);
+      OLED_DISPLAY_SetPointer(44, 1);OLED_DISPLAY_Printf("Volume");
       break;
     case 5:
-      OLED_DISPLAY_SetPointer(31, 0);OLED_DISPLAY_Icon(pythagoreamIcon_64x48, 64, 48);
-      OLED_DISPLAY_SetPointer(24, 6);OLED_DISPLAY_Printf("Pythagrom Meter");
+      OLED_DISPLAY_SetPointer(31, 2);OLED_DISPLAY_Icon(pythagoreamIcon_64x48, 64, 48);
+      OLED_DISPLAY_SetPointer(34, 1);OLED_DISPLAY_Printf("Pythagoras");
       break;
     default:
       menu_id_u8 = menu_id_u8 % 5;
