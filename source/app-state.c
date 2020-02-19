@@ -108,12 +108,13 @@ APP_ReadingDisplay(int32_t value_mm_i32, APP_DISPLAY_UNIT_et unit_ev)
 STATE_MACHINE_State(APP_MENU)
 {
   escale_st * escale_ptr = (escale_st *) STATE_MACHINE_ptr;
-  static uint8_t last_menu_select = 100;
+  static uint8_t last_menu_select;
   
   if (STATE_ENTRY)
   {
     /* menu font select */
     OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
+    last_menu_select = 100;
   }
   
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
@@ -141,7 +142,10 @@ STATE_MACHINE_State(APP_MENU)
     switch(menu_select)
     {
       case 0:
-        STATE_MACHINE_StateChange(APP_ENCODER_TAPE)
+        STATE_MACHINE_StateChange(APP_ENCODER_TAPE);
+        break;
+      case 1:
+        STATE_MACHINE_StateChange(APP_LASER_TAPE);
         break;
         
       default:
@@ -182,11 +186,43 @@ STATE_MACHINE_State(APP_ENCODER_TAPE)
     rotation_pulse_count = escale_ptr->encoder_tape.count;
   }
   
+  if (GPIO_PinRead(P_B5) == LOW) //TODO BSP package
+  {
+    while(GPIO_PinRead(P_B5) == LOW);
+    STATE_MACHINE_StateChange(APP_MENU);
+  }
   /* menu font select */
   OLED_DISPLAY_FontSelect(SquareFont16x24, 16, 24, 43, 58);
   OLED_DISPLAY_SetPointer(15, 4);
   APP_ReadingDisplay(rotation_pulse_count, APP_DISPLAY_UNIT_M);
     
+  if(STATE_EXIT)
+  {
+    
+  }
+}
+
+STATE_MACHINE_State(APP_LASER_TAPE)
+{
+  if(STATE_ENTRY)
+  {
+    OLED_DISPLAY_SetPointer(0,0);
+    OLED_DISPLAY_FillScreen(0x00);
+    
+    /* menu font select */
+    OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
+    OLED_DISPLAY_SetPointer(33, 1);
+    OLED_DISPLAY_Printf("Laser Tape");
+    OLED_DISPLAY_SetPointer(115, 5);
+    OLED_DISPLAY_Printf("M");
+  }
+
+  if (GPIO_PinRead(P_B5) == LOW) //TODO BSP package
+  {
+    while(GPIO_PinRead(P_B5) == LOW);
+    STATE_MACHINE_StateChange(APP_MENU);
+  }
+  
   if(STATE_EXIT)
   {
     

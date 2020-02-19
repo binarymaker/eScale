@@ -49,7 +49,7 @@ escale_st escale;
 /* Exported functions ------------------------------------------------------- */
 STATE_MACHINE_State(APP_MENU);
 STATE_MACHINE_State(APP_ENCODER_TAPE);
-
+STATE_MACHINE_State(APP_LASER_TAPE);
 #ifdef __cplusplus
 }
 #endif
