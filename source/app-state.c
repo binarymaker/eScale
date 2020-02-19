@@ -86,20 +86,20 @@ void
 APP_ReadingDisplay(int32_t value_mm_i32, APP_DISPLAY_UNIT_et unit_ev)
 {
   OLED_DISPLAY_FontSelect(SquareFont16x24, 16, 24, 43, 58);
-  OLED_DISPLAY_SetPointer(15, 4);
+  OLED_DISPLAY_SetPointer(0, 4);
   switch(unit_ev)
   {
     case APP_DISPLAY_UNIT_M:
-      OLED_DISPLAY_Printf("%02.3f", (float)value_mm_i32/1000);
+      OLED_DISPLAY_Printf("%+02.3f", (float)value_mm_i32/1000);
       break;
     case APP_DISPLAY_UNIT_CM:
-      OLED_DISPLAY_Printf("%04.1f", (float)value_mm_i32/10);
+      OLED_DISPLAY_Printf("%+04.1f", (float)value_mm_i32/10);
       break;
     case APP_DISPLAY_UNIT_FT:
-      OLED_DISPLAY_Printf("%03.2f", (float)value_mm_i32 * 0.00328082);
+      OLED_DISPLAY_Printf("%+03.2f", (float)value_mm_i32 * 0.00328082);
       break;
     case APP_DISPLAY_UNIT_IN:
-      OLED_DISPLAY_Printf("%04.1f", (float)value_mm_i32 * 0.0393701);
+      OLED_DISPLAY_Printf("%+04.1f", (float)value_mm_i32 * 0.0393701);
       break;
     default:
       break;
@@ -180,11 +180,6 @@ STATE_MACHINE_State(APP_ENCODER_TAPE)
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
   {
     rotation_pulse_count = escale_ptr->encoder_tape.count;
-    if(0 > rotation_pulse_count)
-    {
-      ROTARY_ENCODER_SetCount(&escale_ptr->encoder_tape, 0);
-      rotation_pulse_count = 0;
-    }
   }
   
   /* menu font select */
