@@ -34,6 +34,35 @@ static int8_t option_select;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
+uint32_t
+APP_LaserSensorMeasure(circularBuffer_st * buffer_obj)
+{
+  uint32_t distance_mm_u32;
+  uint8_t * serial_data_u8ptr = (uint8_t *) buffer_obj->buffer_ptr;
+
+  CIRCULAR_BUFFER_Flush(buffer_obj);
+  USART_Printf("AT1#");
+
+  while(CIRCULAR_BUFFER_Available(buffer_obj) < 8){
+    USART_Printf("\n buffer : %d", CIRCULAR_BUFFER_Available(buffer_obj));
+    DELAY_ms(1000);
+  }
+
+  if (serial_data_u8ptr[0] == 'A' && serial_data_u8ptr[1] == 'T' &&
+      serial_data_u8ptr[2] == 'D')
+  {
+    distance_mm_u32 = (uint32_t)serial_data_u8ptr[5]       |
+                      (uint32_t)serial_data_u8ptr[4] << 8  |
+                      (uint32_t)serial_data_u8ptr[3] << 16 ;
+  }
+  else
+  {
+    distance_mm_u32 = 0u;
+  }
+  
+  return distance_mm_u32;
+}
+
 static void
 APP_MenuDisplay(uint8_t menu_id_u8)
 {
@@ -273,9 +302,6 @@ STATE_MACHINE_State(APP_ENCODER_TAPE)
 
   rotation_pulse_count = ROTARY_ENCODER_ReadCount(&escale_ptr->encoder_tape);
 
-  /* menu font select */
-  OLED_DISPLAY_FontSelect(SquareFont16x24, 16, 24, 43, 58);
-  OLED_DISPLAY_SetPointer(15, 4);
   APP_ReadingDisplay(rotation_pulse_count, unit_select);
 
   if(STATE_EXIT)
@@ -289,6 +315,7 @@ STATE_MACHINE_State(APP_LASER_TAPE)
   escale_st * escale_ptr = (escale_st *) STATE_MACHINE_ptr;
   static uint8_t last_option_select;
   static uint8_t unit_select;
+  uint32_t distance_mm;
 
   if(STATE_ENTRY)
   {
@@ -322,7 +349,8 @@ STATE_MACHINE_State(APP_LASER_TAPE)
     switch (option_select)
     {
     case MEASURE:
-      USART_Printf("AT1#");
+      distance_mm = APP_LaserSensorMeasure(&escale_ptr->serial_receiver);
+      APP_ReadingDisplay(distance_mm, unit_select);
       break;
     case CLEAR:
       ROTARY_ENCODER_SetCount(&escale_ptr->encoder_tape, 0);
@@ -334,6 +362,7 @@ STATE_MACHINE_State(APP_LASER_TAPE)
         unit_select = APP_DISPLAY_UNIT_M;
       }
       APP_UnitDisplay(unit_select);
+      APP_ReadingDisplay(distance_mm, unit_select);
       break;
     case EXIT:
       STATE_MACHINE_StateChange(APP_MENU);

@@ -35,12 +35,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "state-machine.h"
 #include "rotary-encoder.h"
+#include "circular-buffer.h"
 /* Exported types ------------------------------------------------------------*/
 typedef struct escale
 {
   stateMachine_st state_machine;
   rotaryEncoder_st encoder_nav;
   rotaryEncoder_st encoder_tape;
+  circularBuffer_st serial_receiver;
 }escale_st;
 
 escale_st escale;

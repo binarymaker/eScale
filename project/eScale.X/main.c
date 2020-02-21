@@ -29,7 +29,6 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-circularBuffer_st serial_buffer_obj;
 uint8_t serial_buffer[32];
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -44,7 +43,7 @@ main()
   
   MCU_INTERRUPT_ENABLE();
   
-  CIRCULAR_BUFFER_Init(&serial_buffer_obj, serial_buffer, sizeof(uint8_t), 32);
+  CIRCULAR_BUFFER_Init(&escale.serial_receiver, serial_buffer, sizeof(uint8_t), 32);
   
   OLED_DISPLAY_Init();
   OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
