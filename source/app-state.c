@@ -29,13 +29,15 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-static uint8_t menu_select;
+static int8_t menu_select;
+static int8_t option_select;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
 static void
 APP_MenuDisplay(uint8_t menu_id_u8)
 {
+   OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
   /* Clear display */
   OLED_DISPLAY_SetPointer(0, 0) ;OLED_DISPLAY_FillScreen(0x00);
   
@@ -74,6 +76,37 @@ APP_MenuDisplay(uint8_t menu_id_u8)
   OLED_DISPLAY_SetPointer(109, 0);OLED_DISPLAY_Printf("%d/5", menu_id_u8);
 }
 
+enum
+{
+  CLEAR, UNIT, EXIT, OFFSET
+};
+
+static void
+APP_OptionDisplay(uint8_t option_id_u8)
+{
+  OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
+  /* Clear option line in display */
+  OLED_DISPLAY_SetPointer(40, 7) ;OLED_DISPLAY_Printf("          ");
+  switch(option_id_u8)
+  {
+    case CLEAR:
+      OLED_DISPLAY_SetPointer(43, 7);OLED_DISPLAY_Printf("[clear]");
+      break;
+    case OFFSET:
+      OLED_DISPLAY_SetPointer(40, 7);OLED_DISPLAY_Printf("[offset]");
+      break;
+    case UNIT:
+      OLED_DISPLAY_SetPointer(46, 7);OLED_DISPLAY_Printf("[unit]");
+      break;
+    case EXIT:
+      OLED_DISPLAY_SetPointer(46, 7);OLED_DISPLAY_Printf("[exit]");
+      break;
+    default:
+      // TODO
+      break;
+  }
+}
+
 typedef enum
 {
   APP_DISPLAY_UNIT_M,
@@ -81,6 +114,30 @@ typedef enum
   APP_DISPLAY_UNIT_FT,
   APP_DISPLAY_UNIT_IN,
 }APP_DISPLAY_UNIT_et;
+
+void
+APP_UnitDisplay(APP_DISPLAY_UNIT_et unit_ev)
+{
+  OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
+  OLED_DISPLAY_SetPointer(116, 5);
+  switch(unit_ev)
+  {
+    case APP_DISPLAY_UNIT_M:
+      OLED_DISPLAY_Printf("M ");
+      break;
+    case APP_DISPLAY_UNIT_CM:
+      OLED_DISPLAY_Printf("CM");
+      break;
+    case APP_DISPLAY_UNIT_FT:
+      OLED_DISPLAY_Printf("ft");
+      break;
+    case APP_DISPLAY_UNIT_IN:
+      OLED_DISPLAY_Printf("in");
+      break;
+    default:
+      break;
+  }
+}
 
 void
 APP_ReadingDisplay(int32_t value_mm_i32, APP_DISPLAY_UNIT_et unit_ev)
@@ -114,20 +171,14 @@ STATE_MACHINE_State(APP_MENU)
   {
     /* menu font select */
     OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
-    last_menu_select = 100;
+    ROTARY_ENCODER_SetCount(&escale_ptr->encoder_nav, last_menu_select);
+    last_menu_select = -1;
   }
   
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
   {
-    if (5 < escale_ptr->encoder_nav.count)
-    {
-      ROTARY_ENCODER_SetCount(&escale_ptr->encoder_nav, 0);
-    }
-    if (0 > escale_ptr->encoder_nav.count)
-    {
-      ROTARY_ENCODER_SetCount(&escale_ptr->encoder_nav, 5);
-    }
-    menu_select = escale_ptr->encoder_nav.count;
+    ROTARY_ENCODER_LimitCount(&escale_ptr->encoder_nav, 0, 5);
+    menu_select = ROTARY_ENCODER_ReadCount(&escale_ptr->encoder_nav);
   }
   
   if(last_menu_select != menu_select)
@@ -162,7 +213,10 @@ STATE_MACHINE_State(APP_MENU)
 STATE_MACHINE_State(APP_ENCODER_TAPE)
 {
   escale_st * escale_ptr = (escale_st *) STATE_MACHINE_ptr;
+  static uint8_t last_option_select;
   static int32_t rotation_pulse_count;
+  static uint8_t unit_select;
+
   if (STATE_ENTRY)
   {
     OLED_DISPLAY_SetPointer(0,0);
@@ -172,30 +226,55 @@ STATE_MACHINE_State(APP_ENCODER_TAPE)
     OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
     OLED_DISPLAY_SetPointer(30, 1);
     OLED_DISPLAY_Printf("Encoder Tape");
-    OLED_DISPLAY_SetPointer(115, 5);
-    OLED_DISPLAY_Printf("M");
+    APP_UnitDisplay(APP_DISPLAY_UNIT_M);
+
+    ROTARY_ENCODER_SetCount(&escale_ptr->encoder_tape, 0);
+    ROTARY_ENCODER_SetCount(&escale_ptr->encoder_nav, 0);
     
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-    {
-      ROTARY_ENCODER_SetCount(&escale_ptr->encoder_tape, 0);
-    }
+    last_option_select = -1;
   }
+
+  ROTARY_ENCODER_LimitCount(&escale_ptr->encoder_nav, CLEAR, EXIT);
+  option_select = ROTARY_ENCODER_ReadCount(&escale_ptr->encoder_nav);
+
   
-  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+  if(last_option_select != option_select)
   {
-    rotation_pulse_count = escale_ptr->encoder_tape.count;
+    APP_OptionDisplay(option_select);
+    last_option_select = option_select;
   }
-  
+
   if (GPIO_PinRead(P_B5) == LOW) //TODO BSP package
   {
     while(GPIO_PinRead(P_B5) == LOW);
-    STATE_MACHINE_StateChange(APP_MENU);
+    switch (option_select)
+    {
+    case CLEAR:
+      ROTARY_ENCODER_SetCount(&escale_ptr->encoder_tape, 0);
+      break;
+    case UNIT:
+      unit_select++;
+      if (APP_DISPLAY_UNIT_IN < unit_select)
+      {
+        unit_select = APP_DISPLAY_UNIT_M;
+      }
+      APP_UnitDisplay(unit_select);
+      break;
+    case EXIT:
+      STATE_MACHINE_StateChange(APP_MENU);
+      break;
+    default:
+      break;
+    }
   }
+
+  rotation_pulse_count = ROTARY_ENCODER_ReadCount(&escale_ptr->encoder_tape);
+
   /* menu font select */
   OLED_DISPLAY_FontSelect(SquareFont16x24, 16, 24, 43, 58);
   OLED_DISPLAY_SetPointer(15, 4);
-  APP_ReadingDisplay(rotation_pulse_count, APP_DISPLAY_UNIT_M);
-    
+  APP_ReadingDisplay(rotation_pulse_count, unit_select);
+
   if(STATE_EXIT)
   {
     
@@ -204,6 +283,8 @@ STATE_MACHINE_State(APP_ENCODER_TAPE)
 
 STATE_MACHINE_State(APP_LASER_TAPE)
 {
+  escale_st * escale_ptr = (escale_st *) STATE_MACHINE_ptr;
+
   if(STATE_ENTRY)
   {
     OLED_DISPLAY_SetPointer(0,0);
@@ -213,8 +294,6 @@ STATE_MACHINE_State(APP_LASER_TAPE)
     OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
     OLED_DISPLAY_SetPointer(33, 1);
     OLED_DISPLAY_Printf("Laser Tape");
-    OLED_DISPLAY_SetPointer(115, 5);
-    OLED_DISPLAY_Printf("M");
   }
 
   if (GPIO_PinRead(P_B5) == LOW) //TODO BSP package
