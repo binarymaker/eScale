@@ -78,7 +78,7 @@ APP_MenuDisplay(uint8_t menu_id_u8)
 
 enum
 {
-  CLEAR, UNIT, EXIT, OFFSET
+  MEASURE, CLEAR, UNIT, EXIT, OFFSET
 };
 
 static void
@@ -86,9 +86,12 @@ APP_OptionDisplay(uint8_t option_id_u8)
 {
   OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
   /* Clear option line in display */
-  OLED_DISPLAY_SetPointer(40, 7) ;OLED_DISPLAY_Printf("          ");
+  OLED_DISPLAY_SetPointer(40, 7) ;OLED_DISPLAY_Printf("           ");
   switch(option_id_u8)
   {
+    case MEASURE:
+     OLED_DISPLAY_SetPointer(40, 7);OLED_DISPLAY_Printf("[measure]");
+     break;
     case CLEAR:
       OLED_DISPLAY_SetPointer(43, 7);OLED_DISPLAY_Printf("[clear]");
       break;
@@ -228,16 +231,16 @@ STATE_MACHINE_State(APP_ENCODER_TAPE)
     OLED_DISPLAY_Printf("Encoder Tape");
     APP_UnitDisplay(APP_DISPLAY_UNIT_M);
 
-    ROTARY_ENCODER_SetCount(&escale_ptr->encoder_tape, 0);
-    ROTARY_ENCODER_SetCount(&escale_ptr->encoder_nav, 0);
-    
+    option_select = CLEAR;
     last_option_select = -1;
+
+    ROTARY_ENCODER_SetCount(&escale_ptr->encoder_tape, 0);
+    ROTARY_ENCODER_SetCount(&escale_ptr->encoder_nav, option_select);
   }
 
   ROTARY_ENCODER_LimitCount(&escale_ptr->encoder_nav, CLEAR, EXIT);
   option_select = ROTARY_ENCODER_ReadCount(&escale_ptr->encoder_nav);
 
-  
   if(last_option_select != option_select)
   {
     APP_OptionDisplay(option_select);
@@ -284,6 +287,8 @@ STATE_MACHINE_State(APP_ENCODER_TAPE)
 STATE_MACHINE_State(APP_LASER_TAPE)
 {
   escale_st * escale_ptr = (escale_st *) STATE_MACHINE_ptr;
+  static uint8_t last_option_select;
+  static uint8_t unit_select;
 
   if(STATE_ENTRY)
   {
@@ -294,12 +299,48 @@ STATE_MACHINE_State(APP_LASER_TAPE)
     OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
     OLED_DISPLAY_SetPointer(33, 1);
     OLED_DISPLAY_Printf("Laser Tape");
+    APP_UnitDisplay(unit_select);
+    
+    option_select = MEASURE;
+    last_option_select = -1;
+
+    ROTARY_ENCODER_SetCount(&escale_ptr->encoder_nav, option_select);
+  }
+
+  ROTARY_ENCODER_LimitCount(&escale_ptr->encoder_nav, MEASURE, EXIT);
+  option_select = ROTARY_ENCODER_ReadCount(&escale_ptr->encoder_nav);
+
+  if(last_option_select != option_select)
+  {
+    APP_OptionDisplay(option_select);
+    last_option_select = option_select;
   }
 
   if (GPIO_PinRead(P_B5) == LOW) //TODO BSP package
   {
     while(GPIO_PinRead(P_B5) == LOW);
-    STATE_MACHINE_StateChange(APP_MENU);
+    switch (option_select)
+    {
+    case MEASURE:
+      USART_Printf("AT1#");
+      break;
+    case CLEAR:
+      ROTARY_ENCODER_SetCount(&escale_ptr->encoder_tape, 0);
+      break;
+    case UNIT:
+      unit_select++;
+      if (APP_DISPLAY_UNIT_IN < unit_select)
+      {
+        unit_select = APP_DISPLAY_UNIT_M;
+      }
+      APP_UnitDisplay(unit_select);
+      break;
+    case EXIT:
+      STATE_MACHINE_StateChange(APP_MENU);
+      break;
+    default:
+      break;
+    }
   }
   
   if(STATE_EXIT)
