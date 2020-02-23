@@ -58,6 +58,10 @@
         <itemPath>../../library/embclib/source/crc8-ccitt/crc8-ccitt.c</itemPath>
         <itemPath>../../library/embclib/source/crc8-ccitt/crc8-ccitt.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f8" displayName="mpu6050" projectFiles="true">
+        <itemPath>../../source/mpu6050.c</itemPath>
+        <itemPath>../../source/mpu6050.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f6" displayName="oled-driver" projectFiles="true">
         <itemPath>../../library/oled-driver/source/font.h</itemPath>
         <itemPath>../../library/oled-driver/source/oled-display.c</itemPath>
@@ -120,7 +124,7 @@
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="ATmega_DFP" vendor="Microchip" version="2.0.12"/>
+        <pack name="ATmega_DFP" vendor="Atmel" version="1.2.285"/>
       </packs>
       <compileType>
         <linkerTool>

@@ -19,57 +19,50 @@
   \endcond*/
 
 /* Includes ------------------------------------------------------------------*/
-#include "mcu.h"
-#include "oled-display.h"
-#include "circular-buffer.h"
-#include "app-state.h"
-#include "icon-set.h"
-#include "rotary-encoder.h"
 #include "mpu6050.h"
+#include "mcu.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-uint8_t serial_buffer[32];
-mpu6050_st angle_sensor;
-int16_t angle_accl_data[3];
-int16_t angle_gyro_data[3];
+uint8_t reg_data[14];
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
-int
-main()
+void
+MPU6050_Init(mpu6050_st * self, uint8_t dev_addr, 
+             int16_t * accl_data, int16_t * gyro_data)
 {
-  MCU_Init();
-  STATE_MACHINE_Init(escale.state_machine, APP_MENU);
-  ROTARY_ENCODER_Init(&escale.encoder_tape, P_C0, P_C1);
-  ROTARY_ENCODER_Init(&escale.encoder_nav, P_C2, P_C3);
+   uint8_t config_data;
 
-  MPU6050_Init(&angle_sensor, 0x68, angle_accl_data, angle_gyro_data);
-  
-  MCU_INTERRUPT_ENABLE();
-  
-  CIRCULAR_BUFFER_Init(&escale.serial_receiver, serial_buffer, sizeof(uint8_t), 32);
-  
-  OLED_DISPLAY_Init();
-  OLED_DISPLAY_FontSelect(Font_6x8, 6, 8, 32, 127);
+  self->dev_addr  = dev_addr;
+  self->accl_data = accl_data;
+  self->gyro_data = gyro_data;
 
-  OLED_DISPLAY_SetPointer(0, 0);
-  OLED_DISPLAY_Icon(eScaleLogo_128x64, 128, 64);
-   
-  SYSTIMER_Delay(1000);
+  config_data = 0x00;
+  I2C_Transmit(self->dev_addr, 0x6B, &config_data, 1);
+  
+  /* Configure the accelerometer (+/-8g) */
+  config_data = 0x10;
+  I2C_Transmit(self->dev_addr, 0x1C, &config_data, 1);
 
-  while(1)
-  {
-    //STATE_MACHINE_Exec(escale.state_machine);
-    
-    MPU6050_Read(&angle_sensor);
-    OLED_DISPLAY_SetPointer(0, 0);
-    OLED_DISPLAY_Printf("%05d ", angle_sensor.accl_data[0]);
-    OLED_DISPLAY_SetPointer(0, 1);
-    OLED_DISPLAY_Printf("%05d ", angle_sensor.accl_data[1]);
-    OLED_DISPLAY_SetPointer(0, 2);
-    OLED_DISPLAY_Printf("%05d ", angle_sensor.accl_data[2]);
-    DELAY_ms(1000);
-  }
+  /* Configure the gyro (500dps full scale) */
+  config_data = 0x08;
+  I2C_Transmit(self->dev_addr, 0x1B, &config_data, 1);
+
+}
+
+void
+MPU6050_Read(mpu6050_st * self)
+{
+  I2C_Receive(self->dev_addr, 0x3B, reg_data, 14);
+  
+  self->accl_data[0] = reg_data[0] << 8 | reg_data[1];
+  self->accl_data[1] = reg_data[2] << 8 | reg_data[3];
+  self->accl_data[2] = reg_data[4] << 8 | reg_data[5];
+  
+  self->gyro_data[0] = reg_data[8]  << 8 | reg_data[9];
+  self->gyro_data[1] = reg_data[10] << 8 | reg_data[11];
+  self->gyro_data[2] = reg_data[12] << 8 | reg_data[13];
+  
 }
