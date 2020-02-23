@@ -43,24 +43,35 @@ APP_LaserSensorMeasure(circularBuffer_st * buffer_obj)
   CIRCULAR_BUFFER_Flush(buffer_obj);
   USART_Printf("AT1#");
 
-  while(CIRCULAR_BUFFER_Available(buffer_obj) < 8){
-    USART_Printf("\n buffer : %d", CIRCULAR_BUFFER_Available(buffer_obj));
-    DELAY_ms(1000);
+  time_t start_time = SYSTIMER_Millis();
+  while(CIRCULAR_BUFFER_Available(buffer_obj) < 8)
+  {
+    if ((SYSTIMER_Millis() - start_time) > 2000)
+    {
+      return (0u);
+    }
   }
 
+  /* 0 1 2 3 4 5 6 7
+   * A T D $ $ $ C #
+   * $ is data sequence
+   */
+  
   if (serial_data_u8ptr[0] == 'A' && serial_data_u8ptr[1] == 'T' &&
       serial_data_u8ptr[2] == 'D')
   {
     distance_mm_u32 = (uint32_t)serial_data_u8ptr[5]       |
                       (uint32_t)serial_data_u8ptr[4] << 8  |
                       (uint32_t)serial_data_u8ptr[3] << 16 ;
+    /* offset calibration */
+    distance_mm_u32 -= 1189;
   }
   else
   {
     distance_mm_u32 = 0u;
   }
   
-  return distance_mm_u32;
+  return distance_mm_u32 ;
 }
 
 static void
@@ -315,7 +326,7 @@ STATE_MACHINE_State(APP_LASER_TAPE)
   escale_st * escale_ptr = (escale_st *) STATE_MACHINE_ptr;
   static uint8_t last_option_select;
   static uint8_t unit_select;
-  uint32_t distance_mm;
+  static uint32_t distance_mm;
 
   if(STATE_ENTRY)
   {
@@ -327,6 +338,7 @@ STATE_MACHINE_State(APP_LASER_TAPE)
     OLED_DISPLAY_SetPointer(33, 1);
     OLED_DISPLAY_Printf("Laser Tape");
     APP_UnitDisplay(unit_select);
+    APP_ReadingDisplay(0, unit_select);
     
     option_select = MEASURE;
     last_option_select = -1;
@@ -349,7 +361,7 @@ STATE_MACHINE_State(APP_LASER_TAPE)
     switch (option_select)
     {
     case MEASURE:
-      distance_mm = APP_LaserSensorMeasure(&escale_ptr->serial_receiver);
+      distance_mm = APP_LaserSensorMeasure(&escale_ptr->serial_receiver) / 10;
       APP_ReadingDisplay(distance_mm, unit_select);
       break;
     case CLEAR:
