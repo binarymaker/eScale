@@ -34,34 +34,32 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
+#include "common-def.h"
 /* Exported types ------------------------------------------------------------*/
 typedef struct mpu6050_s
 {
   uint8_t dev_addr;
-  int16_t * accl_data;
-  int16_t * gyro_data;
+  int16_t accl_data[3];
+  int16_t gyro_data[3];
+  int16_t angle[3];
 }mpu6050_st;
 
 /* Exported constants --------------------------------------------------------*/
 enum
 {
-  MPU6050_ACCL_X,
-  MPU6050_ACCL_Y,
-  MPU6050_ACCL_Z,
-  MPU6050_TEMP,
-  MPU6050_GYRO_X,
-  MPU6050_GYRO_Y,
-  MPU6050_GYRO_Z
+  MPU6050_X_AXIS, MPU6050_Y_AXIS, MPU6050_Z_AXIS,
 };
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
 void
-MPU6050_Init(mpu6050_st * self, uint8_t dev_addr, 
-             int16_t * accl_data, int16_t * gyro_data);
+MPU6050_Init(mpu6050_st * self, uint8_t dev_addr);
 
 void
 MPU6050_Read(mpu6050_st * self);
+
+void
+MPU6050_calculateAngle(mpu6050_st * self);
 
 #ifdef __cplusplus
 }

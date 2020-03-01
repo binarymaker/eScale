@@ -32,8 +32,6 @@
 /* Private variables ---------------------------------------------------------*/
 uint8_t serial_buffer[32];
 mpu6050_st angle_sensor;
-int16_t angle_accl_data[3];
-int16_t angle_gyro_data[3];
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -45,7 +43,7 @@ main()
   ROTARY_ENCODER_Init(&escale.encoder_tape, P_C0, P_C1);
   ROTARY_ENCODER_Init(&escale.encoder_nav, P_C2, P_C3);
 
-  MPU6050_Init(&angle_sensor, 0x68, angle_accl_data, angle_gyro_data);
+  MPU6050_Init(&angle_sensor, 0x68);
   
   MCU_INTERRUPT_ENABLE();
   
@@ -58,18 +56,39 @@ main()
   OLED_DISPLAY_Icon(eScaleLogo_128x64, 128, 64);
    
   SYSTIMER_Delay(1000);
+  
+  OLED_DISPLAY_SetPointer(0, 0);
+  OLED_DISPLAY_FillScreen(0x00);
 
   while(1)
   {
     //STATE_MACHINE_Exec(escale.state_machine);
     
     MPU6050_Read(&angle_sensor);
+    MPU6050_calculateAngle(&angle_sensor);
+    
     OLED_DISPLAY_SetPointer(0, 0);
     OLED_DISPLAY_Printf("%05d ", angle_sensor.accl_data[0]);
     OLED_DISPLAY_SetPointer(0, 1);
     OLED_DISPLAY_Printf("%05d ", angle_sensor.accl_data[1]);
     OLED_DISPLAY_SetPointer(0, 2);
     OLED_DISPLAY_Printf("%05d ", angle_sensor.accl_data[2]);
-    DELAY_ms(1000);
-  }
+    
+    OLED_DISPLAY_SetPointer(0, 4);
+    OLED_DISPLAY_Printf("%05d ", angle_sensor.gyro_data[0]);
+    OLED_DISPLAY_SetPointer(0, 5);
+    OLED_DISPLAY_Printf("%05d ", angle_sensor.gyro_data[1]);
+    OLED_DISPLAY_SetPointer(0, 6);
+    OLED_DISPLAY_Printf("%05d ", angle_sensor.gyro_data[2]);
+    
+    OLED_DISPLAY_SetPointer(64, 5);
+    OLED_DISPLAY_Printf("%05d ", angle_sensor.angle[0]);
+    OLED_DISPLAY_SetPointer(64, 6);
+    OLED_DISPLAY_Printf("%05d ", angle_sensor.angle[1]);
+    OLED_DISPLAY_SetPointer(64, 7);
+    OLED_DISPLAY_Printf("%05d ", angle_sensor.angle[2]);
+    
+    DELAY_ms(100);
+  } 
 }
+  

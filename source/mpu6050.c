@@ -21,6 +21,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "mpu6050.h"
 #include "mcu.h"
+#include <math.h>
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -30,25 +31,22 @@ uint8_t reg_data[14];
 /* Private functions ---------------------------------------------------------*/
 
 void
-MPU6050_Init(mpu6050_st * self, uint8_t dev_addr, 
-             int16_t * accl_data, int16_t * gyro_data)
+MPU6050_Init(mpu6050_st * self, uint8_t dev_addr)
 {
    uint8_t config_data;
 
   self->dev_addr  = dev_addr;
-  self->accl_data = accl_data;
-  self->gyro_data = gyro_data;
-
+  
   config_data = 0x00;
   I2C_Transmit(self->dev_addr, 0x6B, &config_data, 1);
   
-  /* Configure the accelerometer (+/-8g) */
-  config_data = 0x10;
-  I2C_Transmit(self->dev_addr, 0x1C, &config_data, 1);
-
-  /* Configure the gyro (500dps full scale) */
-  config_data = 0x08;
-  I2C_Transmit(self->dev_addr, 0x1B, &config_data, 1);
+//  /* Configure the accelerometer (+/-8g) */
+//  config_data = 0x10;
+//  I2C_Transmit(self->dev_addr, 0x1C, &config_data, 1);
+//
+//  /* Configure the gyro (500dps full scale) */
+//  config_data = 0x08;
+//  I2C_Transmit(self->dev_addr, 0x1B, &config_data, 1);
 
 }
 
@@ -65,4 +63,28 @@ MPU6050_Read(mpu6050_st * self)
   self->gyro_data[1] = reg_data[10] << 8 | reg_data[11];
   self->gyro_data[2] = reg_data[12] << 8 | reg_data[13];
   
+}
+
+void
+MPU6050_calculateAngle(mpu6050_st * self)
+{
+  double x;
+  double y;
+  double z;
+  
+  double angle_x;
+  double angle_y;
+  double angle_z;
+  
+  x = self->accl_data[MPU6050_X_AXIS];
+  y = self->accl_data[MPU6050_Y_AXIS];
+  z = self->accl_data[MPU6050_Z_AXIS];
+  
+  angle_x = atan(x / sqrt((y * y) + (z * z)));
+  angle_y = atan(y / sqrt((x * x) + (z * z)));
+  angle_z = atan(z / sqrt((x * x) + (y * y)));
+  
+  self->angle[MPU6050_X_AXIS] = angle_x * (180.0 / 3.14);
+  self->angle[MPU6050_Y_AXIS] = angle_y * (180.0 / 3.14);
+  self->angle[MPU6050_Z_AXIS] = angle_z * (180.0 / 3.14);
 }
